@@ -1,4 +1,5 @@
 import sqlite3
+import traceback
 from datetime import datetime
 
 
@@ -84,6 +85,7 @@ class DB:
 			try:
 				self.cursor.execute("SELECT * FROM intro_vuser WHERE _id=" + DB.safe_str(u_id))
 			except (sqlite3.Error, DB.DangerousData):
+				traceback.print_exc()
 				return None
 			data = self.cursor.fetchone()
 			if data is None:
@@ -97,12 +99,14 @@ class DB:
 					+ " WHERE _id = " + DB.safe_str(u_id))
 				self.connection.commit()
 			except (sqlite3.Error, DB.DangerousData):
+				traceback.print_exc()
 				pass
 
 		def get_by_login(self, u_login):
 			try:
 				self.cursor.execute("SELECT * FROM intro_vuser WHERE login='" + DB.safe_str(u_login) + "'")
 			except (sqlite3.Error, DB.DangerousData):
+				traceback.print_exc()
 				return None
 			data = self.cursor.fetchone()
 			if data is None:
@@ -113,6 +117,7 @@ class DB:
 			try:
 				self.cursor.execute("SELECT to_vuser_id FROM intro_vuser_contacts WHERE from_vuser_id=" + DB.safe_str(u_id))
 			except (sqlite3.Error, DB.DangerousData):
+				traceback.print_exc()
 				return []
 			return self.cursor.fetchall()
 
@@ -120,6 +125,7 @@ class DB:
 			try:
 				self.cursor.execute("SELECT _id, login FROM intro_vuser WHERE login LIKE '%" + DB.safe_str(q) + "%'")
 			except (sqlite3.Error, DB.DangerousData):
+				traceback.print_exc()
 				return []
 			return self.cursor.fetchall()
 
@@ -127,6 +133,7 @@ class DB:
 			try:
 				self.cursor.execute("SELECT to_vuser_id FROM intro_vuser_requests WHERE from_vuser_id=" + DB.safe_str(u_id))
 			except (sqlite3.Error, DB.DangerousData):
+				traceback.print_exc()
 				return []
 			return self.cursor.fetchall()
 
@@ -141,6 +148,7 @@ class DB:
 				self.connection.commit()
 				return True
 			except (sqlite3.Error, DB.DangerousData):
+				traceback.print_exc()
 				return False
 
 		def add_to_contacts(self, requester_id, u_id2):
@@ -161,7 +169,8 @@ class DB:
 						+ DB.safe_str(requester_id) + "," + DB.safe_str(u_id2) + ")")
 				self.connection.commit()
 				return True
-			except (sqlite3.Error, DB.DangerousData) as err:
+			except (sqlite3.Error, DB.DangerousData):
+				traceback.print_exc()
 				return False
 
 		def send_request(self, requester_id, to_id):
@@ -180,6 +189,7 @@ class DB:
 				else:
 					return False
 			except (sqlite3.Error, DB.DangerousData):
+				traceback.print_exc()
 				return False
 
 		def close(self):

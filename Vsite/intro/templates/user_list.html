@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>users</title>
+</head>
+<body>
+{% for user in users %}
+<div style="background: #1ff; color: #f11; margin: 5px;">
+    {{user.login}}    <br>
+    {{user.email}}    <br>
+    {{user.reg_date}} <br>
+    {% for cont in user.contacts.all %}
+    <div style="background: #f99; color: #000; margin: 5px;">
+        {{cont.login}} <br>
+    </div>
+    {% endfor %}
+</div>
+{% endfor %}
+</body>
+</html>

@@ -1,0 +1,7 @@
+env/*
+*.pyc
+**/.idea/
+Vsite/seckey
+Vsite/*.sqlite3
+Vsite/*.sqlite3-journal
+Vsite/fake_db/*

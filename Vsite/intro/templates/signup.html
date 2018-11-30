@@ -1,0 +1,66 @@
+{% extends "default.html" %}
+{% block main %}
+<div class="container">
+    <br><br>
+    <form name="signup" method="post">
+        {% csrf_token %}
+        <div class="pink-text">
+            <blockquote>
+                {% for remark in remarks %}
+                    {% if remark.0 == "user" %}
+                            <div>{{ remark.1 }}</div>
+                    {% endif %}
+                {% endfor %}
+            </blockquote>
+        </div>
+        <div class="row">
+            <div class="input-field col s8">
+                <input placeholder="Login" id="login" name="login" type="text" maxlength="20" required="required">
+            </div>
+        </div>
+        <div class="pink-text">
+            <blockquote>
+                {% for remark in remarks %}
+                    {% if remark.0 == "login" %}
+                            <div>{{ remark.1 }}</div>
+                    {% endif %}
+                {% endfor %}
+            </blockquote>
+        </div>
+        <div class="row">
+            <div class="input-field col s8">
+                <input placeholder="Password" id="password1" name="password1" type="password" maxlength="32" required="required">
+            </div>
+        </div>
+        <div class="pink-text">
+            <blockquote>
+                {% for remark in remarks %}
+                    {% if remark.0 == "password" %}
+                            <div>{{ remark.1 }}</div>
+                    {% endif %}
+                {% endfor %}
+            </blockquote>
+        </div>
+        <div class="row">
+            <div class="input-field col s8">
+              <input placeholder="Confirm the password" id="password2" name="password2" type="password" maxlength="32" required="required">
+            </div>
+        </div>
+        <div class="pink-text">
+            <blockquote>
+                {% for remark in remarks %}
+                    {% if remark.0 == "password2" %}
+                            <div>{{ remark.1 }}</div>
+                    {% endif %}
+                {% endfor %}
+            </blockquote>
+        </div>
+        <div class="row">
+            <button type="submit" class="col s2 waves-effect waves-light btn-large">Sign up</button>
+            <button type="reset" class="col s2 waves-effect  pink darken-3 btn-large">Clear</button>
+        </div>
+    </form>
+</div>
+<div class="container">
+</div>
+{% endblock %}

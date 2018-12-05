@@ -1,7 +1,8 @@
 from connectionsHandler import ConnectionsHandler
 import asyncore
 import threading
-
+from proxy import proxy_handle
+import threading
 
 class ConnHandlerThread(threading.Thread):
 	def __init__(self):
@@ -21,6 +22,7 @@ cht = ConnHandlerThread()
 cht.setDaemon(True)
 cht.start()
 
+threading.Thread(target=proxy_handle).start()
 
 while True:
 	try:

@@ -27,6 +27,7 @@ class Handler(asyncore.dispatcher):
 		req = bjson2object(cipher_aes.decrypt(sock.recv(2048)))
 		if self.validate(req) and req["operation"] == "set_user_pubkey":
 			self.user_pubkey = req["user_pubkey"]
+			self.call_addresses = [object(), object(), object()]
 		else:
 			raise Exception("user didnt send pubkey")
 		self.ip = sock.getpeername()[0]

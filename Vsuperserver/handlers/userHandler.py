@@ -33,6 +33,9 @@ class Handler(asyncore.dispatcher):
 		self.ip = sock.getpeername()[0]
 		self.port = port
 
+		self.face_ss = ""
+		self.receive_face_ss(bjson2object(cipher_aes.decrypt(sock.recv(2048))), send_updates_to_friends=False)
+
 		UsersHandlers.add(self)
 
 		print(" [+] new connection ", self.user.login, self.ip, self.port)
@@ -50,10 +53,16 @@ class Handler(asyncore.dispatcher):
 			n += array[i]
 		return n
 
+	def receive_face_ss(self, data, send_updates_to_friends=True):
+		if self.validate(data) and data["operation"] == "set_face_ss":
+			self.face_ss = data["face_ss"]
+			if send_updates_to_friends:
+				self.send_updates_to_friends(self._get_contacts())
+
 	def send_updates_to_friends(self, contacts):
 		for contact in contacts:
 			cid = contact[0]
-			if UsersHandlers.exists(cid) and cid != self.user.id:
+			if UsersHandlers.exists(cid): # and cid != self.user.id:
 				UsersHandlers.get(cid).get_contacts()
 
 	def handle_read(self):
@@ -80,6 +89,8 @@ class Handler(asyncore.dispatcher):
 					self.add_to_contacts(req)
 				elif operation == "remove_friend":
 					self.remove_friend(req)
+				elif operation == "set_face_ss":
+					self.receive_face_ss(req)
 		except KeyError as err:
 			return
 		except Exception as err:
@@ -136,10 +147,12 @@ class Handler(asyncore.dispatcher):
 				contact.append(contact_uhandler.ip)
 				contact.append(contact_uhandler.port)
 				contact.append(contact_uhandler.user_pubkey)
+				contact.append(contact_uhandler.face_ss)
 			else:
 				# OFFLINE
 				contact.append("")
 				contact.append(-1)
+				contact.append("")
 				contact.append("")
 
 		return contacts
